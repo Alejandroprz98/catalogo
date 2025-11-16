@@ -30,4 +30,4 @@ EXPOSE 8080
 
 RUN chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache
 
-CMD php -S 0.0.0.0:${PORT:-8080} router.php
+CMD sh -c "php -S 0.0.0.0:${PORT:-8080} router.php"
