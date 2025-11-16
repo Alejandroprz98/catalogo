@@ -1,5 +1,4 @@
 FROM php:8.2-cli AS builder
-
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
@@ -13,10 +12,11 @@ RUN curl -sS https://getcomposer.org/installer | php \
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
-RUN npm install && npm run build
+RUN npm install
+RUN npm run build
+
 
 FROM php:8.2-cli
-
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
@@ -24,12 +24,10 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql mbstring exif pcntl bcmath opcache
 
-COPY . .
-COPY --from=builder /app/vendor /app/vendor
-COPY --from=builder /app/public/build /app/public/build
-
-RUN chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache
+COPY --from=builder /app /app
 
 EXPOSE 8080
+
+RUN chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache
 
 CMD php -S 0.0.0.0:${PORT:-8080} router.php
