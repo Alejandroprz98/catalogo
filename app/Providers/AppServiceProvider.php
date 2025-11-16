@@ -17,19 +17,8 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot()
+    public function boot(): void
     {
-    if (env('APP_ENV') === 'production') {
         Schema::defaultStringLength(191);
-
-        Artisan::command('migrate', function () {
-            $this->comment('Migrations disabled in production.');
-        });
-
-        Artisan::command('db:seed', function () {
-            $this->comment('Seeds disabled in production.');
-        });
     }
-}
-
 }
