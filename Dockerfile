@@ -16,6 +16,7 @@ RUN npm install
 RUN npm run build
 
 
+
 FROM php:8.2-cli
 WORKDIR /app
 
@@ -26,8 +27,9 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=builder /app /app
 
+RUN chown -R www-data:www-data storage bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache
+
 EXPOSE 8080
 
-RUN chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache
-
-CMD sh -c "php -S 0.0.0.0:${PORT:-8080} router.php"
+CMD ["php", "-S", "0.0.0.0:8080", "router.php"]
