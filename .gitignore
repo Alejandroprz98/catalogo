@@ -22,7 +22,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-railway.json
-railway.toml
-railway.* 
-.nixpacks/*
+
